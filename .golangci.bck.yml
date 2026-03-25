@@ -1,0 +1,71 @@
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - bodyclose
+    - dupl
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - gosec
+    - misspell
+    - prealloc
+    - revive
+    - unconvert
+    - unparam
+
+linters-settings:
+  gocyclo:
+    min-complexity: 15
+  gocognit:
+    min-complexity: 20
+  dupl:
+    threshold: 150
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+      - style
+  revive:
+    rules:
+      - name: exported
+        arguments:
+          - "checkPrivateReceivers"
+      - name: unused-parameter
+  misspell:
+    locale: US
+  gosec:
+    excludes:
+      - G404 # Allow math/rand for simulated latency (not crypto)
+
+issues:
+  exclude-rules:
+    # Allow dot imports in test files (testify)
+    - path: _test\.go
+      linters:
+        - dupl
+        - gosec
+        - goconst
+    # Exclude some revive rules for test files
+    - path: _test\.go
+      linters:
+        - revive
+      text: "unused-parameter"
+    # Provider adapters intentionally share similar Search boilerplate
+    - path: internal/provider/
+      linters:
+        - dupl
+  max-issues-per-linter: 50
+  max-same-issues: 5
+
+run:
+  timeout: 5m
+  tests: true

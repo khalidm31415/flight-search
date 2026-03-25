@@ -1,0 +1,78 @@
+version: "2"
+run:
+  tests: true
+linters:
+  enable:
+    - bodyclose
+    - dupl
+    - gocognit
+    - goconst
+    - gocritic
+    - gocyclo
+    - gosec
+    - misspell
+    - prealloc
+    - paralleltest
+    - revive
+    - unconvert
+    - unparam
+  settings:
+    dupl:
+      threshold: 150
+    gocognit:
+      min-complexity: 20
+    goconst:
+      min-len: 3
+      min-occurrences: 3
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - performance
+        - style
+    gocyclo:
+      min-complexity: 15
+    gosec:
+      excludes:
+        - G404
+    misspell:
+      locale: US
+    revive:
+      rules:
+        - name: exported
+          arguments:
+            - checkPrivateReceivers
+        - name: unused-parameter
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - dupl
+          - goconst
+          - gosec
+        path: _test\.go
+      - linters:
+          - revive
+        path: _test\.go
+        text: unused-parameter
+      - linters:
+          - dupl
+        path: internal/provider/
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+issues:
+  max-issues-per-linter: 50
+  max-same-issues: 5
+formatters:
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
